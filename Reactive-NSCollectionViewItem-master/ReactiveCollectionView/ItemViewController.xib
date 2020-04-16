@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ItemViewController">
+            <connections>
+                <outlet property="_check" destination="O11-zK-uu8" id="Fe5-vl-0By"/>
+                <outlet property="_label" destination="mdE-0f-agW" id="0Zy-PL-hA3"/>
+                <outlet property="view" destination="4" id="17"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="ItemViewCell" translatesAutoresizingMaskIntoConstraints="NO" id="4" customClass="ItemView">
+            <rect key="frame" x="0.0" y="0.0" width="470" height="296"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mdE-0f-agW">
+                    <rect key="frame" x="3" y="275" width="53" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="eMm-YC-VqX">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" id="O11-zK-uu8">
+                    <rect key="frame" x="57" y="273" width="61" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Udk-GK-iqN">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="mdE-0f-agW" firstAttribute="leading" secondItem="4" secondAttribute="leading" constant="5" id="Ba6-tk-mzp"/>
+                <constraint firstItem="mdE-0f-agW" firstAttribute="top" secondItem="4" secondAttribute="top" constant="5" id="E3n-Ag-qaM"/>
+                <constraint firstItem="O11-zK-uu8" firstAttribute="leading" secondItem="mdE-0f-agW" secondAttribute="trailing" constant="5" id="hc1-gO-uOV"/>
+                <constraint firstAttribute="bottom" secondItem="mdE-0f-agW" secondAttribute="bottom" constant="275" id="pbz-46-1xo"/>
+            </constraints>
+            <point key="canvasLocation" x="132" y="154"/>
+        </customView>
+    </objects>
+</document>
