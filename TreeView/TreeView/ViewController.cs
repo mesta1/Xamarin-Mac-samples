@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AppKit;
+using CoreGraphics;
 using Foundation;
 
 namespace TreeView
@@ -15,20 +17,34 @@ namespace TreeView
         {
             base.ViewDidLoad();
 
-            var items = new List<Item> {
-                new Item()
+            var items = new List<ItemViewModel> {
+                new ItemViewModel()
                 {
-                    Text = "item1", Checked = false,
-                    Children = new List<Item>{ new Item{Text = "subItem1"}, new Item { Text = "subItem2", Checked = true} }
+                    Text = "item1item1item1item1item1item1item1item1item1item1item1item1item1item1item1item1",
+                    Checked = false,
+                    Children = new List<ItemViewModel>{ new ItemViewModel { Text = "subItem1"}, new ItemViewModel { Text = "subItem2", Checked = true} }
                 },
-                new Item { Text = "item2", Checked = true } };
+                new ItemViewModel { Text = "item2", Checked = true } };
             var dataSource = new ItemDataSource();
             dataSource.Data = items;
 
             _outletView.DataSource = dataSource;
-            _outletView.Delegate = new ItemDelegate(dataSource, _outletView);
+            _outletView.Delegate = new ItemDelegate(_outletView);
+
             // Do any additional setup after loading the view.
         }
+
+        public void SizeToFit()
+        {
+            var view = (NSTableCellView) _outletView.GetView(0, 0, true);
+            if (view != null)
+            {
+                var width = view.FittingSize.Width;
+                _outletView.SetFrameSize(new CGSize(_outletView.Frame.Height, width));
+            }
+        }
+        
+       
 
         public override NSObject RepresentedObject
         {

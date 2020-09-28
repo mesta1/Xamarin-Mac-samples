@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
@@ -13,50 +14,46 @@ using Splat;
 
 namespace TreeView
 {
-    public class Item: ReactiveNSObject
+    //public class Item
+    //{
+    //    public string Text { get; set; }
+    //   
+    //    public bool Checked { get; set; }
+    //
+    //    public List<Item> Children { get; set; }
+    //
+    //    public Item()
+    //    {
+    //        Children = new List<Item>();
+    //    }
+    //}
+
+    public class ItemViewModel : ReactiveNSObject
     {
         private bool _checked;
 
         public string Text { get; set; }
-       
-        public bool Checked
-        {
-            get => _checked;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _checked, value);                
-                Debug.WriteLine($"Checked {Checked}");
-            }
-        }
-
-        public List<Item> Children { get; set; }
-
-        public Item()
-        {
-            Children = new List<Item>();
-        }
-    }
-
-    public class ItemViewModel : ReactiveObject
-    {
-        private bool _checked;
-
-        public string Name { get; set; }
 
         public bool Checked
         {
             get => _checked;
-            set
-            {
-                _checked = value;
-                Debug.WriteLine($"Checked {Checked}");
-            }
+            set { RaiseAndSetIfChanged(ref _checked, value); }
         }
+
+        public List<ItemViewModel> Children { get; set; }
 
         public ItemViewModel()
         {
+            Children = new List<ItemViewModel>();
         }
-	}
+
+        public void SetCheckedForChilds(bool @checked)
+        {
+            this.Checked = @checked;
+            foreach (var child in Children)
+                child.SetCheckedForChilds(@checked);
+        }
+    }
 
 
     /// <summary>
@@ -100,6 +97,12 @@ namespace TreeView
         public void RaisePropertyChanged(PropertyChangedEventArgs args)
         {
             reactiveObj.RaisePropertyChanged(args.PropertyName);
+        }
+
+       
+        public TRet RaiseAndSetIfChanged<TRet>(ref TRet backingField, TRet newValue, [CallerMemberName] string propertyName = null)
+        {
+            return reactiveObj.RaiseAndSetIfChanged(ref backingField, newValue, propertyName);
         }
 
         class ProxyReactiveObject : ReactiveObject

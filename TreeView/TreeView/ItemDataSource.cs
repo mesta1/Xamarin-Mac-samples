@@ -8,7 +8,7 @@ namespace TreeView
 {
     public class ItemDataSource : NSOutlineViewDataSource
     {
-        public List<Item> Data = new List<Item>();
+        public List<ItemViewModel> Data = new List<ItemViewModel>();
 
         public ItemDataSource()
         {
@@ -22,7 +22,7 @@ namespace TreeView
             }
             else
             {
-                return ((Item)item).Children.Count;
+                return ((ItemViewModel)item).Children.Count;
             }
         }
 
@@ -34,7 +34,7 @@ namespace TreeView
             }
             else
             {
-                return ((Item)item).Children[(int)childIndex];
+                return ((ItemViewModel)item).Children[(int)childIndex];
             }
 
         }
@@ -47,25 +47,22 @@ namespace TreeView
             }
             else
             {
-                return ((Item)item).Children.Any();
+                return ((ItemViewModel)item).Children.Any();
             }
         }
     }
 
     public class ItemDelegate : NSOutlineViewDelegate
     {
-        private readonly ItemDataSource _dataSource;
-
-        public ItemDelegate(ItemDataSource dataSource, NSOutlineView outlineView)
-        {
-            _dataSource = dataSource;
+        public ItemDelegate(NSOutlineView outlineView)
+        {           
             outlineView.RegisterNib(new NSNib(nameof(ItemView), NSBundle.MainBundle), nameof(ItemView));
         }
 
         public override NSView GetView(NSOutlineView outlineView, NSTableColumn tableColumn, NSObject item)
         {
             var view = (ItemView)outlineView.MakeView(nameof(ItemView), this);
-            view.ViewModel = (Item)item;
+            view.ViewModel = (ItemViewModel)item;
             view.UpdateUI();
             return view;
         }

@@ -5,10 +5,12 @@ using Foundation;
 using AppKit;
 using ReactiveUI;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.ComponentModel;
 
 namespace TreeView
 {
-    public partial class ItemView : ReactiveView<Item>
+    public partial class ItemView : ReactiveTableViewCell<ItemViewModel>
     {
         private CompositeDisposable _disposables;
 
@@ -39,8 +41,18 @@ namespace TreeView
             _disposables?.Dispose();
             _disposables = new CompositeDisposable();
 
-            this.Bind(ViewModel, vm => vm.Checked, v => v._check.State, _check.ObservableActivated(),
-                vmv => vmv ? NSCellStateValue.On : NSCellStateValue.Off, vvm => vvm == NSCellStateValue.On)
+            _check.State = ViewModel.Checked ? NSCellStateValue.On : NSCellStateValue.Off;
+
+            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                h=> ViewModel.PropertyChanged +=h, h=>ViewModel.PropertyChanged-=h)
+                .Subscribe(_ => _check.State = ViewModel.Checked ? NSCellStateValue.On : NSCellStateValue.Off)
+                .DisposeWith(_disposables);
+
+            //this.OneWayBind(ViewModel, vm => vm.Checked, v => v._check.State,
+            //    vmv => vmv ? NSCellStateValue.On : NSCellStateValue.Off)
+            //    .DisposeWith(_disposables);
+
+            _check.ObservableActivated().Subscribe(_ => ViewModel.SetCheckedForChilds(_check.State == NSCellStateValue.On))
                 .DisposeWith(_disposables);
 
             this.OneWayBind(ViewModel, vm => vm.Text, v => v._check.Title)
